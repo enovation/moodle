@@ -29,6 +29,7 @@ require_once(dirname(__FILE__).'/../config.php');
 require_once($CFG->libdir . '/formslib.php');
 require_once($CFG->dirroot .'/course/lib.php');
 require_once($CFG->libdir .'/filelib.php');
+require_once($CFG->libdir .'/uploadlib.php');
 
 define('GENERATOR_RANDOM', 0);
 define('GENERATOR_SEQUENCE', 1);
@@ -395,6 +396,9 @@ class generator {
         $wheresql = "name $modules_list_sql AND name $modules_ignored_sql";
         $modules = $DB->get_records_select('modules', $wheresql, array_merge($modules_params, $ignore_params));
 
+        // Get ID of the quiz module
+        $quizmodule = $DB->get_record('modules',array('name'=>'quiz'));
+
         foreach ($modules as $key => $module) {
             $module->count = 0;
 
@@ -425,8 +429,8 @@ class generator {
                         // If only one module is created, and we also need to add a question to a quiz, create only a quiz
                         if ($this->get('number_of_modules') == 1
                                     && $this->get('questions_per_quiz') > 0
-                                    && !empty($modules[8])) {
-                            $moduledata = $modules[8];
+                                    && !empty($modules[$quizid])) {
+                            $moduledata = $quizmodule;
                         } else {
                             $moduledata = $modules[array_rand($modules)];
                         }
@@ -512,9 +516,12 @@ class generator {
                                 break;
                             case 'quiz':
                                 $module->intro = $description;
-                                $module->feedbacktext = 'blah';
+                                $module->feedbacktext = array(
+                                    array('text'=>'feedback 1','format'=>1),
+                                    array('text'=>'feedback 2','format'=>1),
+                                    array('text'=>'feedback 3','format'=>1));
                                 $module->feedback = 1;
-                                $module->feedbackboundaries = array(2, 1);
+                                $module->feedbackboundaries = array("50%", "10%");
                                 $module->grade = 10;
                                 $module->timeopen = time();
                                 $module->timeclose = time() + 68854;
@@ -570,9 +577,11 @@ class generator {
                         $module->coursemodule = add_course_module($module);
                         $module->section = $i;
 
+                        $mform = new fake_form();
+
                         if (function_exists($add_instance_function)) {
                             $this->verbose("Calling module function $add_instance_function");
-                            $module->instance = $add_instance_function($module, '');
+                            $module->instance = $add_instance_function($module, $mform);
                             $DB->set_field('course_modules', 'instance', $module->instance, array('id'=>$module->coursemodule));
                         } else {
                             $this->verbose("Function $add_instance_function does not exist!");
@@ -639,9 +648,6 @@ class generator {
                             'numerical', 'truefalse', 'calculated');
                     $qtype = $supported_types[array_rand($supported_types)];
 
-                    if ($qtype == 'calculated') {
-                        continue;
-                    }
                     $classname = "question_{$qtype}_qtype";
                     if ($qtype == 'multianswer') {
                         $classname = "embedded_cloze_qtype";
