@@ -428,8 +428,7 @@ class generator {
 
                         // If only one module is created, and we also need to add a question to a quiz, create only a quiz
                         if ($this->get('number_of_modules') == 1
-                                    && $this->get('questions_per_quiz') > 0
-                                    && !empty($modules[$quizid])) {
+                                    && $this->get('questions_per_quiz') > 0) {
                             $moduledata = $quizmodule;
                         } else {
                             $moduledata = $modules[array_rand($modules)];
