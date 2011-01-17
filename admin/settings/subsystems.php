@@ -46,4 +46,7 @@ if ($hassiteconfig) { // speedup for non-admins, add all caps used on this page
         get_string('configenableavailability','condition'), 0));
 
     $optionalsubsystems->add(new admin_setting_configcheckbox('enableplagiarism', get_string('enableplagiarism','plagiarism'), get_string('configenableplagiarism','plagiarism'), 0));
+
+    $options = array('off'=>get_string('off', 'admin'), 'x_sendfile'=>get_string('xsendfileon', 'admin'), 'x_accel_redirect'=>get_string('xaccelredirecton', 'admin'));
+    $optionalsubsystems->add(new admin_setting_configselect('enablexsendfile', get_string('xsendfile', 'admint'), get_string('configxsendfile', 'admin'), 'off', $options));
 }

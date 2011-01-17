@@ -96,7 +96,7 @@ class stored_file {
      *
      * @return string full path to pool file with file content
      **/
-    protected function get_content_file_location() {
+    public function get_content_file_location() {
         $contenthash = $this->file_record->contenthash;
         $l1 = $contenthash[0].$contenthash[1];
         $l2 = $contenthash[2].$contenthash[3];

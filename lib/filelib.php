@@ -1870,11 +1870,16 @@ function send_stored_file($stored_file, $lifetime=86400 , $filter=0, $forcedownl
     if (check_browser_version('MSIE')) {
         $filename = rawurlencode($filename);
     }
-
     if ($forcedownload) {
         header('Content-Disposition: attachment; filename="'.$filename.'"');
     } else {
         header('Content-Disposition: inline; filename="'.$filename.'"');
+    }
+
+    if( isset($CFG->enablexsendfile) && $CFG->enablexsendfile != 'off') {
+        $xsendfile = $CFG->enablexsendfile;
+    } else {
+        $xsendfile = false;
     }
 
     if ($lifetime > 0) {
@@ -1882,7 +1887,7 @@ function send_stored_file($stored_file, $lifetime=86400 , $filter=0, $forcedownl
         header('Expires: '. gmdate('D, d M Y H:i:s', time() + $lifetime) .' GMT');
         header('Pragma: ');
 
-        if (empty($CFG->disablebyteserving) && $mimetype != 'text/plain' && $mimetype != 'text/html') {
+        if (!$xsendfile && empty($CFG->disablebyteserving) && $mimetype != 'text/plain' && $mimetype != 'text/html') {
 
             header('Accept-Ranges: bytes');
 
@@ -1934,6 +1939,16 @@ function send_stored_file($stored_file, $lifetime=86400 , $filter=0, $forcedownl
         header('Accept-Ranges: none'); // Do not allow byteserving when caching disabled
     }
 
+    if ($xsendfile && !$filter) {
+       header('Content-Type: '.$mimetype);
+       if ($xsendfile == 'x_sendfile') {
+           header('X-Sendfile: ' . $stored_file->get_content_file_location() );
+       } elseif ($xsendfile == 'x_accel_redirect') {
+           header('X-Accel-Redirect: ' . str_replace($CFG->dataroot , '', $stored_file->get_content_file_location()));
+       }
+       die();
+    }
+ 
     if (empty($filter)) {
         $filtered = false;
         if ($mimetype == 'text/html' && !empty($CFG->usesid)) {
