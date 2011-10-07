@@ -81,9 +81,13 @@
 
         $morelink = '<br />&nbsp;&nbsp;';
 
-        $totalentries = get_viewable_entry_count($postid, $bloglimit, $start, $filtertype, $filterselect, $tagid, $tag, $sort='created DESC');
         $blogEntries = blog_fetch_entries($postid, $bloglimit, $start, $filtertype, $filterselect, $tagid, $tag, $sort='created DESC', true);
-
+        foreach($blogEntries as $k=>$blogentry)  {
+            if(!blog_user_can_view_user_post($blogentry->userid)) {
+	        unset($blogEntries[$k]);
+            }
+        }
+        $totalentries = count($blogEntries);
         print_paging_bar($totalentries, $blogpage, $bloglimit, get_baseurl($filtertype, $filterselect), 'blogpage');
 
         if ($CFG->enablerssfeeds) {
