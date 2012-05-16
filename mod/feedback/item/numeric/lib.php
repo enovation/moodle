@@ -254,7 +254,7 @@ class feedback_item_numeric extends feedback_item_base {
         //print the question and label
         echo '<div class="feedback_item_label_'.$align.'">';
         echo '('.$item->label.') ';
-        echo format_text($item->name . $requiredmark, true, false, false);
+        echo format_text($item->name.$requiredmark, true, false);
         if ($item->dependitem) {
             $params = array('id'=>$item->dependitem);
             if ($dependitem = $DB->get_record('feedback_item', $params)) {
@@ -336,7 +336,7 @@ class feedback_item_numeric extends feedback_item_base {
 
         //print the question and label
         echo '<div class="feedback_item_label_'.$align.$highlight.'">';
-        echo format_text($item->name . $requiredmark, true, false, false);
+        echo format_text($item->name.$requiredmark, true, false);
         echo '<span class="feedback_item_numinfo">';
         switch(true) {
             case ($range_from === '-' AND is_numeric($range_to)):
@@ -402,7 +402,7 @@ class feedback_item_numeric extends feedback_item_base {
         //print the question and label
         echo '<div class="feedback_item_label_'.$align.'">';
         echo '('.$item->label.') ';
-        echo format_text($item->name . $requiredmark, true, false, false);
+        echo format_text($item->name.$requiredmark, true, false);
         switch(true) {
             case ($range_from === '-' AND is_numeric($range_to)):
                 echo ' ('.get_string('maximal', 'feedback').

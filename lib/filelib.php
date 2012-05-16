@@ -1921,10 +1921,11 @@ function send_file($path, $filename, $lifetime = 'default' , $filter=0, $pathiss
             $options = new stdClass();
             $options->noclean = true;
             $options->nocache = true; // temporary workaround for MDL-5136
+            $options->context = get_context_instance(CONTEXT_COURSE, $COURSE->id);
             $text = $pathisstring ? $path : implode('', file($path));
 
             $text = file_modify_html_header($text);
-            $output = format_text($text, FORMAT_HTML, $options, $COURSE->id);
+            $output = format_text($text, FORMAT_HTML, $options);
 
             readstring_accel($output, $mimetype, false);
 
@@ -1933,8 +1934,9 @@ function send_file($path, $filename, $lifetime = 'default' , $filter=0, $pathiss
             $options = new stdClass();
             $options->newlines = false;
             $options->noclean = true;
+            $options->context = get_context_instance(CONTEXT_COURSE, $COURSE->id);
             $text = htmlentities($pathisstring ? $path : implode('', file($path)));
-            $output = '<pre>'. format_text($text, FORMAT_MOODLE, $options, $COURSE->id) .'</pre>';
+            $output = '<pre>'. format_text($text, FORMAT_MOODLE, $options) .'</pre>';
 
             readstring_accel($output, $mimetype, false);
 
@@ -2064,9 +2066,10 @@ function send_stored_file($stored_file, $lifetime=86400 , $filter=0, $forcedownl
             $options = new stdClass();
             $options->noclean = true;
             $options->nocache = true; // temporary workaround for MDL-5136
+            $options->context = get_context_instance(CONTEXT_COURSE, $COURSE->id);
             $text = $stored_file->get_content();
             $text = file_modify_html_header($text);
-            $output = format_text($text, FORMAT_HTML, $options, $COURSE->id);
+            $output = format_text($text, FORMAT_HTML, $options);
 
             readstring_accel($output, $mimetype, false);
 
@@ -2075,8 +2078,9 @@ function send_stored_file($stored_file, $lifetime=86400 , $filter=0, $forcedownl
             $options = new stdClass();
             $options->newlines = false;
             $options->noclean = true;
+            $options->context = get_context_instance(CONTEXT_COURSE, $COURSE->id);
             $text = $stored_file->get_content();
-            $output = '<pre>'. format_text($text, FORMAT_MOODLE, $options, $COURSE->id) .'</pre>';
+            $output = '<pre>'. format_text($text, FORMAT_MOODLE, $options) .'</pre>';
 
             readstring_accel($output, $mimetype, false);
 

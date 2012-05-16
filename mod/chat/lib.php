@@ -805,7 +805,8 @@ function chat_format_message_manually($message, $courseid, $sender, $currentuser
 
     $options = new stdClass();
     $options->para = false;
-    $text = format_text($text, FORMAT_MOODLE, $options, $courseid);
+    $options->context = get_context_instance(CONTEXT_COURSE, $courseid);
+    $text = format_text($text, FORMAT_MOODLE, $options);
 
     // And now check for special cases
     $special = false;
@@ -965,7 +966,8 @@ function chat_format_message_theme ($message, $chatuser, $currentuser, $grouping
     /// Parse the text to clean and filter it
     $options = new stdClass();
     $options->para = false;
-    $text = format_text($text, FORMAT_MOODLE, $options, $courseid);
+    $options->context = get_context_instance(CONTEXT_COURSE, $courseid);
+    $text = format_text($text, FORMAT_MOODLE, $options);
 
     // And now check for special cases
     $special = false;

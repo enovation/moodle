@@ -317,7 +317,7 @@ class feedback_item_multichoice extends feedback_item_base {
         //print the question and label
         echo '<div class="feedback_item_label_'.$align.'">';
         echo '('.$item->label.') ';
-        echo format_text($item->name.$requiredmark, true, false, false);
+        echo format_text($item->name.$requiredmark, true, false);
         if ($item->dependitem) {
             if ($dependitem = $DB->get_record('feedback_item', array('id'=>$item->dependitem))) {
                 echo ' <span class="feedback_depend">';
@@ -420,7 +420,7 @@ class feedback_item_multichoice extends feedback_item_base {
 
         //print the question and label
         echo '<div class="feedback_item_label_'.$align.$highlight.'">';
-            echo format_text($item->name.$requiredmark, true, false, false);
+            echo format_text($item->name.$requiredmark, true, false);
         echo '</div>';
 
         //print the presentation
@@ -511,7 +511,7 @@ class feedback_item_multichoice extends feedback_item_base {
         //print the question and label
         echo '<div class="feedback_item_label_'.$align.'">';
         echo '('.$item->label.') ';
-        echo format_text($item->name . $requiredmark, true, false, false);
+        echo format_text($item->name . $requiredmark, true, false);
         echo '</div>';
 
         //print the presentation

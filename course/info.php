@@ -54,7 +54,10 @@
     echo $OUTPUT->box_start('generalbox info');
 
     $course->summary = file_rewrite_pluginfile_urls($course->summary, 'pluginfile.php', $context->id, 'course', 'summary', NULL);
-    echo format_text($course->summary, $course->summaryformat, array('overflowdiv'=>true), $course->id);
+    $formatoptions = new stdClass();
+    $formatoptions->overflowdiv = true;
+    $formatoptions->context = get_context_instance(CONTEXT_COURSE, $course->id);
+    echo format_text($course->summary, $course->summaryformat, $formatoptions);
 
     if (!empty($CFG->coursecontact)) {
         $coursecontactroles = explode(',', $CFG->coursecontact);

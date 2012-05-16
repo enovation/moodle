@@ -1233,8 +1233,9 @@ class question_bank_view {
         $formatoptions = new stdClass();
         $formatoptions->noclean = true;
         $formatoptions->overflowdiv = true;
+        $formatoptions->context = get_context_instance(CONTEXT_COURSE, $this->course->id);
         echo '<div class="boxaligncenter">';
-        echo format_text($category->info, $category->infoformat, $formatoptions, $this->course->id);
+        echo format_text($category->info, $category->infoformat, $formatoptions);
         echo "</div>\n";
     }
 

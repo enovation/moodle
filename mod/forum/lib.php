@@ -2976,7 +2976,8 @@ function forum_make_mail_post($course, $cm, $forum, $discussion, $post, $userfro
     // format the post body
     $options = new stdClass();
     $options->para = true;
-    $formattedtext = format_text($post->message, $post->messageformat, $options, $course->id);
+    $options->context = get_context_instance(CONTEXT_COURSE, $course->id);
+    $formattedtext = format_text($post->message, $post->messageformat, $options);
 
     $output = '<table border="0" cellpadding="3" cellspacing="0" class="forumpost">';
 
@@ -3352,13 +3353,13 @@ function forum_print_post($post, $discussion, $forum, &$cm, $course, $ownpost=fa
     if ($shortenpost) {
         // Prepare shortened version
         $postclass    = 'shortenedpost';
-        $postcontent  = format_text(forum_shorten_post($post->message), $post->messageformat, $options, $course->id);
+        $postcontent  = format_text(forum_shorten_post($post->message), $post->messageformat, $options);
         $postcontent .= html_writer::link($discussionlink, get_string('readtherest', 'forum'));
         $postcontent .= html_writer::tag('span', '('.get_string('numwords', 'moodle', count_words(strip_tags($post->message))).')...', array('class'=>'post-word-count'));
     } else {
         // Prepare whole post
         $postclass    = 'fullpost';
-        $postcontent  = format_text($post->message, $post->messageformat, $options, $course->id);
+        $postcontent  = format_text($post->message, $post->messageformat, $options);
         if (!empty($highlight)) {
             $postcontent = highlight($highlight, $postcontent);
         }

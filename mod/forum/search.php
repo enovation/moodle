@@ -262,8 +262,9 @@ foreach ($posts as $post) {
 
     $options = new stdClass();
     $options->trusted = $post->messagetrust;
+    $options->context = get_context_instance(CONTEXT_COURSE, $course->id);
     $post->message = highlight($strippedsearch,
-                    format_text($post->message, $post->messageformat, $options, $course->id),
+                    format_text($post->message, $post->messageformat, $options),
                     0, '<fgw9sdpq4>', '</fgw9sdpq4>');
 
     foreach ($searchterms as $searchterm) {

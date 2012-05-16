@@ -248,9 +248,10 @@
 
                 $formatoptions = new stdClass();
                 $formatoptions->para = false;
+                $formatoptions->context = get_context_instance(CONTEXT_COURSE, $this->page->course->id);
 
                 $r.= html_writer::start_tag('div',array('class'=>'description'));
-                    $r.= format_text($description, FORMAT_HTML, $formatoptions, $this->page->course->id);
+                    $r.= format_text($description, FORMAT_HTML, $formatoptions);
                 $r.= html_writer::end_tag('div');
             }
         $r.= html_writer::end_tag('li');

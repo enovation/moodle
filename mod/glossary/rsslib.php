@@ -83,6 +83,7 @@
 
             $formatoptions = new stdClass();
             $formatoptions->trusttext = true;
+            $formatoptions->context = get_context_instance(CONTEXT_COURSE, $glossary->course);
 
             foreach ($recs as $rec) {
                 $item = new stdClass();
@@ -101,7 +102,7 @@
 
                 $definition = file_rewrite_pluginfile_urls($rec->entrydefinition, 'pluginfile.php',
                     $modcontext->id, 'mod_glossary', 'entry', $rec->entryid);
-                $item->description = format_text($definition, $rec->entryformat, $formatoptions, $glossary->course);
+                $item->description = format_text($definition, $rec->entryformat, $formatoptions);
                 $items[] = $item;
             }
 

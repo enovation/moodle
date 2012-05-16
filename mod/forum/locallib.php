@@ -294,8 +294,9 @@ class forum_portfolio_caller extends portfolio_module_caller_base {
         $viewfullnames = true;
         // format the post body
         $options = portfolio_format_text_options();
+        $options->context = get_context_instance(CONTEXT_COURSE, $this->get('course')->id);
         $format = $this->get('exporter')->get('format');
-        $formattedtext = format_text($post->message, $post->messageformat, $options, $this->get('course')->id);
+        $formattedtext = format_text($post->message, $post->messageformat, $options);
         $formattedtext = portfolio_rewrite_pluginfile_urls($formattedtext, $this->modcontext->id, 'mod_forum', 'post', $post->id, $format);
 
         $output = '<table border="0" cellpadding="3" cellspacing="0" class="forumpost">';

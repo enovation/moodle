@@ -1014,6 +1014,10 @@ function format_text($text, $format = FORMAT_MOODLE, $options = NULL, $courseid_
     global $CFG, $COURSE, $DB, $PAGE;
     static $croncache = array();
 
+    if ($courseid_do_not_use !== null) {
+        throw new coding_exception("Deprecated course id, use context option instead.");
+    }
+
     if ($text === '' || is_null($text)) {
         return ''; // no need to do any filters and cleaning
     }
@@ -1396,7 +1400,7 @@ function format_module_intro($module, $activity, $cmid, $filter=true) {
     $context = get_context_instance(CONTEXT_MODULE, $cmid);
     $options = array('noclean'=>true, 'para'=>false, 'filter'=>$filter, 'context'=>$context, 'overflowdiv'=>true);
     $intro = file_rewrite_pluginfile_urls($activity->intro, 'pluginfile.php', $context->id, 'mod_'.$module, 'intro', null);
-    return trim(format_text($intro, $activity->introformat, $options, null));
+    return trim(format_text($intro, $activity->introformat, $options));
 }
 
 /**

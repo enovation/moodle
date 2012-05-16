@@ -66,6 +66,7 @@ class workshop_rubric_list_assessment_form extends workshop_rubric_assessment_fo
         $current    = $this->_customdata['current'];
         $nodims     = $this->_customdata['nodims'];     // number of assessment dimensions
 
+        $formatoptions = array('context' => get_context_instance(CONTEXT_COURSE, $workshop->course->id));
         for ($i = 0; $i < $nodims; $i++) {
             // dimension header
             $dimtitle = get_string('dimensionnumber', 'workshopform_rubric', $i+1);
@@ -92,7 +93,7 @@ class workshop_rubric_list_assessment_form extends workshop_rubric_assessment_fo
                 $definition = $fields->{'definition__idx_'.$i.'__idy_'.$j};
                 $definitionformat = $fields->{'definition__idx_'.$i.'__idy_'.$j.'format'};
                 $levelgrp[] = $mform->createElement('radio', 'chosenlevelid__idx_'.$i, '',
-                        format_text($definition, $definitionformat, null, $workshop->course->id), $levelid);
+                        format_text($definition, $definitionformat, $formatoptions), $levelid);
             }
             $mform->addGroup($levelgrp, 'levelgrp__idx_'.$i, '', "<br />\n", false);
         }
@@ -133,6 +134,7 @@ class workshop_rubric_grid_assessment_form extends workshop_rubric_assessment_fo
         $mform->addElement('html', '<th class="header">' . get_string('criteria', 'workshopform_rubric') . '</th>');
         $mform->addElement('html', '<th class="header" colspan="'.$numofcolumns.'">'.get_string('levels', 'workshopform_rubric').'</th>');
 
+        $formatoptions = array('context' => get_context_instance(CONTEXT_COURSE, $workshop->course->id));
         for ($i = 0; $i < $nodims; $i++) {
 
             $mform->addElement('html', '<tr class="r'. $i % 2  .'"><td class="criterion">' . "\n");
@@ -158,7 +160,7 @@ class workshop_rubric_grid_assessment_form extends workshop_rubric_assessment_fo
                 $definition = $fields->{'definition__idx_'.$i.'__idy_'.$j};
                 $definitionformat = $fields->{'definition__idx_'.$i.'__idy_'.$j.'format'};
                 $mform->addElement('radio', 'chosenlevelid__idx_'.$i, '',
-                        format_text($definition, $definitionformat, null, $workshop->course->id), $levelid);
+                        format_text($definition, $definitionformat, $formatoptions), $levelid);
                 $mform->addElement('html', '</td>' . "\n");
             }
             $mform->addElement('html', '</tr>' . "\n");

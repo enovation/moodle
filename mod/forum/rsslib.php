@@ -306,6 +306,7 @@ function forum_rss_feed_contents($forum, $sql, $context) {
     }
 
     $formatoptions = new stdClass();
+    $formatoptions->context = $context;
     $items = array();
     foreach ($recs as $rec) {
             $item = new stdClass();
@@ -331,7 +332,7 @@ function forum_rss_feed_contents($forum, $sql, $context) {
             $formatoptions->trusted = $rec->posttrust;
             $message = file_rewrite_pluginfile_urls($rec->postmessage, 'pluginfile.php', $context->id,
                 'mod_forum', 'post', $rec->postid);
-            $item->description = format_text($message, $rec->postformat, $formatoptions, $forum->course);
+            $item->description = format_text($message, $rec->postformat, $formatoptions);
 
             //TODO: MDL-31129 implement post attachment handling
             /*if (!$isdiscussion) {
