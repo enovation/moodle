@@ -1013,9 +1013,10 @@ function quiz_question_tostring($question, $showicon = false,
         $formatoptions = new stdClass();
         $formatoptions->noclean = true;
         $formatoptions->para = false;
+        $formatoptions->context = $COURSE->id;
         $questiontext = strip_tags(format_text($question->questiontext,
                 $question->questiontextformat,
-                $formatoptions, $COURSE->id));
+                $formatoptions));
         $questiontext = shorten_text($questiontext, 200);
         $result .= '<span class="questiontext">';
         if (!empty($questiontext)) {
@@ -1209,6 +1210,7 @@ class quiz_question_bank_view extends question_bank_view {
     protected function print_category_info($category) {
         $formatoptions = new stdClass();
         $formatoptions->noclean = true;
+        $formatoptions->context = $this->course->id;
         $strcategory = get_string('category', 'quiz');
         echo '<div class="categoryinfo"><div class="categorynamefieldcontainer">' .
                 $strcategory;
@@ -1217,7 +1219,7 @@ class quiz_question_bank_view extends question_bank_view {
         echo '</span></div><div class="categoryinfofieldcontainer">' .
                 '<span class="categoryinfofield">';
         echo shorten_text(strip_tags(format_text($category->info, $category->infoformat,
-                $formatoptions, $this->course->id)), 200);
+                $formatoptions)), 200);
         echo '</span></div></div>';
     }
 
