@@ -601,6 +601,7 @@ function wiki_parse_content($markup, $pagecontent, $options = array()) {
         $parsed['parsed_text'] = file_rewrite_pluginfile_urls($parsed['parsed_text'], 'pluginfile.php',
                                                               $context->id, 'mod_wiki', 'attachments', $subwiki->id);
     }
+    
     return $parsed;
 }
 
