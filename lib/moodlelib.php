@@ -8865,6 +8865,9 @@ function get_performance_info() {
     $info['html'] .= '<span class="timeused">'.$info['realtime'].' secs</span> ';
     $info['txt'] .= 'time: '.$info['realtime'].'s ';
 
+    // GET/POST is useful for txt logged information.
+    $info['txt'] .= 'method: ' . $_SERVER['REQUEST_METHOD'] . ' ';
+
     if (function_exists('memory_get_usage')) {
         $info['memory_total'] = memory_get_usage();
         $info['memory_growth'] = memory_get_usage() - $PERF->startmemory;
