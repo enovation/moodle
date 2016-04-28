@@ -224,7 +224,7 @@ class repository_filesystem extends repository {
             $SESSION->repository_filesystem_search['from'] = $limit;
             $pages = -1;
 
-        // We reached the end of the repository, or our limits.
+            // We reached the end of the repository, or our limits.
         } else {
             $SESSION->repository_filesystem_search['from'] = 0;
             $pages = 0;
@@ -437,7 +437,7 @@ class repository_filesystem extends repository {
      * @return array
      */
     public static function get_instance_option_names() {
-        return array('fs_path', 'relativefiles');
+        return array('fs_path', 'relativefiles', 'updateinterval');
     }
 
     /**
@@ -449,6 +449,7 @@ class repository_filesystem extends repository {
     public function set_option($options = array()) {
         $options['fs_path'] = clean_param($options['fs_path'], PARAM_PATH);
         $options['relativefiles'] = clean_param($options['relativefiles'], PARAM_INT);
+        $options['updateinterval'] = clean_param($options['updateinterval'], PARAM_INT);
         $ret = parent::set_option($options);
         return $ret;
     }
@@ -484,13 +485,19 @@ class repository_filesystem extends repository {
                 }
                 closedir($handle);
             }
+
+            $mform->addElement('text', 'updateinterval',  get_string('updateinterval', 'repository_filesystem'));
+            $mform->addElement('static', 'updateinterval_desc', '', get_string('updateinterval_desc', 'repository_filesystem'));
             $mform->addElement('checkbox', 'relativefiles', get_string('relativefiles', 'repository_filesystem'),
                 get_string('relativefiles_desc', 'repository_filesystem'));
+
             $mform->setType('relativefiles', PARAM_INT);
+            $mform->setType('updateinterval', PARAM_INT);
+            $mform->setDefault('updateinterval', 60);
 
         } else {
-            $mform->addElement('static', null, '',  get_string('nopermissions', 'error', get_string('configplugin',
-                'repository_filesystem')));
+            $mform->addElement('static', null, '',  get_string('nopermissions', 'error',
+                get_string('configplugin', 'repository_filesystem')));
             return false;
         }
     }
@@ -557,10 +564,16 @@ class repository_filesystem extends repository {
     }
 
     public function sync_reference(stored_file $file) {
-        if ($file->get_referencelastsync() + 60 > time()) {
-            // Does not cost us much to synchronise within our own filesystem, check every 1 minute.
+        $updateinterval = intval($this->get_option('updateinterval'));
+
+        if (empty($updateinterval) || ($updateinterval <= 0)) {
+            $updateinterval = 60;
+        }
+
+        if ($file->get_referencelastsync() + $updateinterval > time()) {
             return false;
         }
+
         static $issyncing = false;
         if ($issyncing) {
             // Avoid infinite recursion when calling $file->get_filesize() and get_contenthash().
@@ -848,8 +861,8 @@ function repository_filesystem_pluginfile($course, $cm, $context, $filearea, $ar
     }
     // The thumbnails should not be changing much, but maybe the default lifetime is too long.
     $lifetime = $CFG->filelifetime;
-    if ($lifetime > 60*10) {
-        $lifetime = 60*10;
+    if ($lifetime > 60 * 10) {
+        $lifetime = 60 * 10;
     }
     send_stored_file($file, $lifetime, 0, $forcedownload, $options);
 }

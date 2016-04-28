@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -39,4 +38,5 @@ $string['pluginname'] = 'File system';
 $string['searchresults'] = 'Search results';
 $string['enablecourseinstances'] = 'Allow admins to add a file system repository instance to a course (configurable only by admins)';
 $string['enableuserinstances'] = 'Allow admins to add a file system repository instance for personal use (configurable only by admins)';
-
+$string['updateinterval'] = 'Update interval';
+$string['updateinterval_desc'] = 'This allows to set up refresh time in seconds. May impact performance if set too low.';
