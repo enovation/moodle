@@ -2239,6 +2239,25 @@ class file_storage {
         $rs->close();
         mtrace('done.');
 
+        // Remove rows from {files_reference} without any link/usage in {files} and lastsync older than 7 days.
+        mtrace('Cleaning deleted referenced files... ', '');
+        cron_trace_time_and_memory();
+        $old = time() - DAYSECS * 7;
+        $sql = "SELECT p.id
+                  FROM {files_reference} p
+             LEFT JOIN {files} o ON (o.referencefileid = p.id)
+                 WHERE o.id IS NULL
+                       AND p.lastsync < :old";
+
+        $rs = $DB->get_recordset_sql($sql, array('old' => $old));
+        $count = 0;
+        foreach ($rs as $unusedreferencedfile) {
+            $DB->delete_records('files_reference', ['id' => $unusedreferencedfile->id]);
+            $count++;
+        }
+        $rs->close();
+        mtrace("done. $count reference(s) deleted.");
+
         // remove trash pool files once a day
         // if you want to disable purging of trash put $CFG->fileslastcleanup=time(); into config.php
         $filescleanupperiod = empty($CFG->filescleanupperiod) ? 86400 : $CFG->filescleanupperiod;
