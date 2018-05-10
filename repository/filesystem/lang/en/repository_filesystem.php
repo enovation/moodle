@@ -40,3 +40,5 @@ $string['searchresults'] = 'Search results';
 $string['enablecourseinstances'] = 'Allow admins to add a file system repository instance to a course (configurable only by admins)';
 $string['enableuserinstances'] = 'Allow admins to add a file system repository instance for personal use (configurable only by admins)';
 $string['privacy:metadata'] = 'The File system repository plugin does not store or transmit any personal data.';
+$string['updateinterval'] = 'Update interval';
+$string['updateinterval_desc'] = 'This allows to set up refresh time in seconds. May impact performance if set too low.';
