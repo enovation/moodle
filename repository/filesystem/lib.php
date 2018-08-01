@@ -437,7 +437,7 @@ class repository_filesystem extends repository {
      * @return array
      */
     public static function get_instance_option_names() {
-        return array('fs_path', 'relativefiles');
+        return array('fs_path', 'relativefiles', 'updateinterval');
     }
 
     /**
@@ -449,6 +449,7 @@ class repository_filesystem extends repository {
     public function set_option($options = array()) {
         $options['fs_path'] = clean_param($options['fs_path'], PARAM_PATH);
         $options['relativefiles'] = clean_param($options['relativefiles'], PARAM_INT);
+        $options['updateinterval'] = clean_param($options['updateinterval'], PARAM_INT);
         $ret = parent::set_option($options);
         return $ret;
     }
@@ -484,9 +485,13 @@ class repository_filesystem extends repository {
                 }
                 closedir($handle);
             }
+            $mform->addElement('text', 'updateinterval',  get_string('updateinterval', 'repository_filesystem'));
+            $mform->addElement('static', 'updateinterval_desc', '', get_string('updateinterval_desc', 'repository_filesystem'));
             $mform->addElement('checkbox', 'relativefiles', get_string('relativefiles', 'repository_filesystem'),
                 get_string('relativefiles_desc', 'repository_filesystem'));
             $mform->setType('relativefiles', PARAM_INT);
+            $mform->setType('updateinterval', PARAM_INT);
+            $mform->setDefault('updateinterval', 60);
 
         } else {
             $mform->addElement('static', null, '',  get_string('nopermissions', 'error', get_string('configplugin',
@@ -557,8 +562,13 @@ class repository_filesystem extends repository {
     }
 
     public function sync_reference(stored_file $file) {
-        if ($file->get_referencelastsync() + 60 > time()) {
             // Does not cost us much to synchronise within our own filesystem, check every 1 minute.
+            // Added capability to set interval
+        $updateinterval = intval($this->get_option('updateinterval'));
+        if (empty($updateinterval) || ($updateinterval <= 0)) {
+            $updateinterval = 60;
+        }
+        if ($file->get_referencelastsync() + $updateinterval > time()) {
             return false;
         }
         static $issyncing = false;
