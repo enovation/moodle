@@ -133,7 +133,7 @@ class core_grade_item_testcase extends grade_base_testcase {
 
         $files = $fs->get_area_files($grade_item->get_context()->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
         // Includes directories.
-        $this->assertCount(4, $files);
+        $this->assertCount(2, $files);
 
         $this->assertTrue($grade_item->delete());
 

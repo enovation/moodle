@@ -292,7 +292,7 @@ class assignfeedback_editpdf_privacy_testcase extends \mod_assign\tests\mod_assi
 
         // Check that there are also files generated.
         $files = $DB->get_records('files', ['component' => 'assignfeedback_editpdf', 'filearea' => 'download']);
-        $this->assertCount(10, $files);
+        $this->assertCount(5, $files);
 
         $deletedata = new assign_plugin_request_data($context, $assign1);
         $deletedata->set_userids([$user1->id, $user3->id]);
@@ -312,7 +312,7 @@ class assignfeedback_editpdf_privacy_testcase extends \mod_assign\tests\mod_assi
 
         // Check the files as well.
         $files = $DB->get_records('files', ['component' => 'assignfeedback_editpdf', 'filearea' => 'download']);
-        // We should now only have six records here.
-        $this->assertCount(6, $files);
+        // We should now only have 3 records here.
+        $this->assertCount(3, $files);
     }
 }

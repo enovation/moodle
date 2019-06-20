@@ -506,23 +506,14 @@ class mod_workshop_external_testcase extends externallib_advanced_testcase {
 
         // Check files.
         $contentfiles = $fs->get_area_files($this->context->id, 'mod_workshop', 'submission_content', $submission->id);
-        $this->assertCount(2, $contentfiles);
-        foreach ($contentfiles as $file) {
-            if ($file->is_directory()) {
-                continue;
-            } else {
-                $this->assertEquals($filenameimg, $file->get_filename());
-            }
-        }
+        $this->assertCount(1, $contentfiles);
+        $file = array_shift($contentfiles);
+        $this->assertEquals($filenameimg, $file->get_filename());
+
         $contentfiles = $fs->get_area_files($this->context->id, 'mod_workshop', 'submission_attachment', $submission->id);
-        $this->assertCount(2, $contentfiles);
-        foreach ($contentfiles as $file) {
-            if ($file->is_directory()) {
-                continue;
-            } else {
-                $this->assertEquals($attachfilename, $file->get_filename());
-            }
-        }
+        $this->assertCount(1, $contentfiles);
+        $file = array_shift($contentfiles);
+        $this->assertEquals($attachfilename, $file->get_filename());
     }
 
     /**
@@ -682,23 +673,14 @@ class mod_workshop_external_testcase extends externallib_advanced_testcase {
 
         // Check files.
         $contentfiles = $fs->get_area_files($this->context->id, 'mod_workshop', 'submission_content', $submission->id);
-        $this->assertCount(2, $contentfiles);
-        foreach ($contentfiles as $file) {
-            if ($file->is_directory()) {
-                continue;
-            } else {
-                $this->assertEquals($filenameimg, $file->get_filename());
-            }
-        }
+        $this->assertCount(1, $contentfiles);
+        $file = array_shift($contentfiles);
+        $this->assertEquals($filenameimg, $file->get_filename());
+
         $contentfiles = $fs->get_area_files($this->context->id, 'mod_workshop', 'submission_attachment', $submission->id);
-        $this->assertCount(2, $contentfiles);
-        foreach ($contentfiles as $file) {
-            if ($file->is_directory()) {
-                continue;
-            } else {
-                $this->assertEquals($attachfilename, $file->get_filename());
-            }
-        }
+        $this->assertCount(1, $contentfiles);
+        $file = array_shift($contentfiles);
+        $this->assertEquals($attachfilename, $file->get_filename());
     }
 
     /**

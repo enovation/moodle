@@ -87,7 +87,11 @@ switch ($action) {
         $filepath = file_correct_filepath($filepath);
         $return = new stdClass();
         if ($stored_file = $fs->get_file($user_context->id, 'user', 'draft', $draftid, $filepath, $filename)) {
-            $parent_path = $stored_file->get_parent_directory()->get_filepath();
+            if ($filepath === '/') {
+                $parent_path = '/';
+            } else {
+                $parent_path = $stored_file->get_parent_directory()->get_filepath();
+            }
             if ($stored_file->is_directory()) {
                 $files = $fs->get_directory_files($user_context->id, 'user', 'draft', $draftid, $filepath, true);
                 foreach ($files as $file) {

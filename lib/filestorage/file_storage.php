@@ -529,6 +529,25 @@ class file_storage {
             $filename = '.';
         }
 
+        // Special case - root level directory entry is not created in the DB.
+        if ($filepath === '/' && $filename === '.') {
+            $filerecord = new stdClass();
+            $filerecord->contenthash = 'da39a3ee5e6b4b0d3255bfef95601890afd80709';
+            $filerecord->pathnamehash = $this->get_pathname_hash($contextid, $component, $filearea, $itemid, $filepath, $filename);
+            $filerecord->contextid = $contextid;
+            $filerecord->component = $component;
+            $filerecord->filearea = $filearea;
+            $filerecord->itemid = $itemid;
+            $filerecord->filepath = '/';
+            $filerecord->filename = '.';
+            $filerecord->userid = -1;
+            $filerecord->filesize = 0;
+            $filerecord->mimetype = null;
+
+            $emulated = new stored_file($this, $filerecord);
+            return $emulated;
+        }
+
         $pathnamehash = $this->get_pathname_hash($contextid, $component, $filearea, $itemid, $filepath, $filename);
         return $this->get_file_by_hash($pathnamehash);
     }
@@ -751,10 +770,6 @@ class file_storage {
     public function get_directory_files($contextid, $component, $filearea, $itemid, $filepath, $recursive = false, $includedirs = true, $sort = "filepath, filename") {
         global $DB;
 
-        if (!$directory = $this->get_file($contextid, $component, $filearea, $itemid, $filepath, '.')) {
-            return array();
-        }
-
         $orderby = (!empty($sort)) ? " ORDER BY {$sort}" : '';
 
         if ($recursive) {
@@ -768,10 +783,11 @@ class file_storage {
                            ON f.referencefileid = r.id
                      WHERE f.contextid = :contextid AND f.component = :component AND f.filearea = :filearea AND f.itemid = :itemid
                            AND ".$DB->sql_substr("f.filepath", 1, $length)." = :filepath
-                           AND f.id <> :dirid
+                           AND NOT (f.filepath = :filepath2 AND f.filename = '.')
                            $dirs
                            $orderby";
-            $params = array('contextid'=>$contextid, 'component'=>$component, 'filearea'=>$filearea, 'itemid'=>$itemid, 'filepath'=>$filepath, 'dirid'=>$directory->get_id());
+            $params = array('contextid' => $contextid, 'component' => $component, 'filearea' => $filearea, 'itemid' => $itemid,
+                    'filepath' => $filepath, 'filepath2' => $filepath);
 
             $files = array();
             $dirs  = array();
@@ -787,7 +803,8 @@ class file_storage {
 
         } else {
             $result = array();
-            $params = array('contextid'=>$contextid, 'component'=>$component, 'filearea'=>$filearea, 'itemid'=>$itemid, 'filepath'=>$filepath, 'dirid'=>$directory->get_id());
+            $params = array('contextid' => $contextid, 'component' => $component, 'filearea' => $filearea, 'itemid' => $itemid,
+                    'filepath' => $filepath, 'filepath2' => $filepath);
 
             $length = core_text::strlen($filepath);
 
@@ -799,7 +816,7 @@ class file_storage {
                          WHERE f.contextid = :contextid AND f.component = :component AND f.filearea = :filearea
                                AND f.itemid = :itemid AND f.filename = '.'
                                AND ".$DB->sql_substr("f.filepath", 1, $length)." = :filepath
-                               AND f.id <> :dirid
+                               AND f.filepath <> :filepath2
                                $orderby";
                 $reqlevel = substr_count($filepath, '/') + 1;
                 $filerecords = $DB->get_records_sql($sql, $params);
@@ -973,6 +990,11 @@ class file_storage {
         if (strpos($filepath, '/') !== 0 or strrpos($filepath, '/') !== strlen($filepath)-1) {
             // path must start and end with '/'
             throw new file_exception('storedfileproblem', 'Invalid file path');
+        }
+
+        // Do not create top-level directory. Return the object with no DB entry?
+        if ($filepath === '/') {
+            return false;
         }
 
         $pathnamehash = $this->get_pathname_hash($contextid, $component, $filearea, $itemid, $filepath, '.');
@@ -1163,8 +1185,10 @@ class file_storage {
                                                      $newrecord->filepath, $newrecord->filename, $e->debuginfo);
         }
 
-
-        $this->create_directory($newrecord->contextid, $newrecord->component, $newrecord->filearea, $newrecord->itemid, $newrecord->filepath, $newrecord->userid);
+        if ($newrecord->filepath !== '/') {
+            $this->create_directory($newrecord->contextid, $newrecord->component, $newrecord->filearea, $newrecord->itemid,
+                                    $newrecord->filepath, $newrecord->userid);
+        }
 
         return $this->get_file_instance($newrecord);
     }
@@ -1334,7 +1358,10 @@ class file_storage {
                                                     $newrecord->filepath, $newrecord->filename, $e->debuginfo);
         }
 
-        $this->create_directory($newrecord->contextid, $newrecord->component, $newrecord->filearea, $newrecord->itemid, $newrecord->filepath, $newrecord->userid);
+        if ($newrecord->filepath !== '/') {
+            $this->create_directory($newrecord->contextid, $newrecord->component, $newrecord->filearea, $newrecord->itemid,
+                                    $newrecord->filepath, $newrecord->userid);
+        }
 
         return $this->get_file_instance($newrecord);
     }
@@ -1453,8 +1480,10 @@ class file_storage {
                                                     $newrecord->filepath, $newrecord->filename, $e->debuginfo);
         }
 
-        $this->create_directory($newrecord->contextid, $newrecord->component, $newrecord->filearea, $newrecord->itemid, $newrecord->filepath, $newrecord->userid);
-
+        if ($newrecord->filepath !== '/') {
+            $this->create_directory($newrecord->contextid, $newrecord->component, $newrecord->filearea, $newrecord->itemid,
+                    $newrecord->filepath, $newrecord->userid);
+        }
         return $this->get_file_instance($newrecord);
     }
 
@@ -2188,13 +2217,14 @@ class file_storage {
         mtrace('Deleting old draft files... ', '');
         cron_trace_time_and_memory();
         $old = time() - 60*60*24*4;
-        $sql = "SELECT *
+        $sql = "SELECT MIN(id), contextid, itemid
                   FROM {files}
-                 WHERE component = 'user' AND filearea = 'draft' AND filepath = '/' AND filename = '.'
-                       AND timecreated < :old";
+                 WHERE component = 'user' AND filearea = 'draft' AND filepath = '/'
+                       AND timecreated < :old
+                 GROUP BY contextid, itemid";
         $rs = $DB->get_recordset_sql($sql, array('old'=>$old));
         foreach ($rs as $dir) {
-            $this->delete_area_files($dir->contextid, $dir->component, $dir->filearea, $dir->itemid);
+            $this->delete_area_files($dir->contextid, 'user', 'draft', $dir->itemid);
         }
         $rs->close();
         mtrace('done.');

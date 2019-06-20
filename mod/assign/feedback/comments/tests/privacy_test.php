@@ -187,7 +187,7 @@ class assignfeedback_comments_privacy_testcase extends \mod_assign\tests\mod_ass
         $files = $fs->get_area_files($assign->get_context()->id, ASSIGNFEEDBACK_COMMENTS_COMPONENT,
             ASSIGNFEEDBACK_COMMENTS_FILEAREA);
         // 4 including directories.
-        $this->assertEquals(4, count($files));
+        $this->assertEquals(2, count($files));
 
         // Delete all comments for this context.
         $requestdata = new \mod_assign\privacy\assign_plugin_request_data($context, $assign);
@@ -240,7 +240,7 @@ class assignfeedback_comments_privacy_testcase extends \mod_assign\tests\mod_ass
         $files = $fs->get_area_files($assign->get_context()->id, ASSIGNFEEDBACK_COMMENTS_COMPONENT,
             ASSIGNFEEDBACK_COMMENTS_FILEAREA);
         // 4 including directories.
-        $this->assertEquals(4, count($files));
+        $this->assertEquals(2, count($files));
 
         // Delete all comments for this grade object.
         $requestdata = new \mod_assign\privacy\assign_plugin_request_data($context, $assign, $grade1, [], $user1);
@@ -257,10 +257,9 @@ class assignfeedback_comments_privacy_testcase extends \mod_assign\tests\mod_ass
         $fs = new file_storage();
         $files = $fs->get_area_files($assign->get_context()->id, ASSIGNFEEDBACK_COMMENTS_COMPONENT,
             ASSIGNFEEDBACK_COMMENTS_FILEAREA);
-        // 2 files that were not deleted.
-        $this->assertEquals(2, count($files));
+        // 1 file that was not deleted.
+        $this->assertEquals(1, count($files));
 
-        array_shift($files);
         $file = array_shift($files);
 
         $this->assertInstanceOf('stored_file', $file);
@@ -314,11 +313,11 @@ class assignfeedback_comments_privacy_testcase extends \mod_assign\tests\mod_ass
         $this->assertNotEmpty($feedbackcomments);
 
         $fs = new file_storage();
-        // 6 including directories for assign 1.
-        // 4 including directories for assign 2.
-        $this->assertCount(6, $fs->get_area_files($assign1->get_context()->id,
+        // 3 for assign 1.
+        // 2 for assign 2.
+        $this->assertCount(3, $fs->get_area_files($assign1->get_context()->id,
                 ASSIGNFEEDBACK_COMMENTS_COMPONENT, ASSIGNFEEDBACK_COMMENTS_FILEAREA));
-        $this->assertCount(4, $fs->get_area_files($assign2->get_context()->id,
+        $this->assertCount(2, $fs->get_area_files($assign2->get_context()->id,
                 ASSIGNFEEDBACK_COMMENTS_COMPONENT, ASSIGNFEEDBACK_COMMENTS_FILEAREA));
 
         $deletedata = new \mod_assign\privacy\assign_plugin_request_data($assign1->get_context(), $assign1);
@@ -339,11 +338,11 @@ class assignfeedback_comments_privacy_testcase extends \mod_assign\tests\mod_ass
         $this->assertNotEmpty($feedbackcomments);
 
         // We have deleted two from assign 1, and none from assign 2.
-        // 2 including directories for assign 1.
-        // 4 including directories for assign 2.
-        $this->assertCount(2, $fs->get_area_files($assign1->get_context()->id,
+        // 1 for assign 1.
+        // 2 for assign 2.
+        $this->assertCount(1, $fs->get_area_files($assign1->get_context()->id,
                 ASSIGNFEEDBACK_COMMENTS_COMPONENT, ASSIGNFEEDBACK_COMMENTS_FILEAREA));
-        $this->assertCount(4, $fs->get_area_files($assign2->get_context()->id,
+        $this->assertCount(2, $fs->get_area_files($assign2->get_context()->id,
                 ASSIGNFEEDBACK_COMMENTS_COMPONENT, ASSIGNFEEDBACK_COMMENTS_FILEAREA));
     }
 }

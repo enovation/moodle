@@ -202,7 +202,7 @@ class data_field_file extends data_field_base {
             $usercontext = context_user::instance($USER->id);
             $fs = get_file_storage();
             $files = $fs->get_area_files($usercontext->id, 'user', 'draft', $value);
-            return count($files) >= 2;
+            return count($files) >= 1;
         }
         return false;
     }

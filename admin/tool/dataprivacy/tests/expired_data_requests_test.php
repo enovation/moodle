@@ -91,7 +91,7 @@ class tool_dataprivacy_expired_data_requests_testcase extends data_privacy_testc
             'itemid' => $requestid,
             'contextid' => $studentusercontext->id,
         );
-        $this->assertEquals(2, $DB->count_records('files', $fileconditions));
+        $this->assertEquals(1, $DB->count_records('files', $fileconditions));
 
         // Run expiry deletion - should not affect test export.
         $expiredrequests = data_request::get_expired_requests();
@@ -101,7 +101,7 @@ class tool_dataprivacy_expired_data_requests_testcase extends data_privacy_testc
         // Confirm test export was not deleted.
         $request = new data_request($requestid);
         $this->assertEquals(api::DATAREQUEST_STATUS_DOWNLOAD_READY, $request->get('status'));
-        $this->assertEquals(2, $DB->count_records('files', $fileconditions));
+        $this->assertEquals(1, $DB->count_records('files', $fileconditions));
 
         // Change request expiry to 1 second and allow it to elapse.
         set_config('privacyrequestexpiry', 1, 'tool_dataprivacy');

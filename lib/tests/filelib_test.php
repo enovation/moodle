@@ -697,7 +697,7 @@ class core_filelib_testcase extends advanced_testcase {
         file_prepare_draft_area($draftitemid, $syscontext->id, $component, $filearea, $itemid);
 
         $draftfiles = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid);
-        $this->assertCount(3, $draftfiles);
+        $this->assertCount(2, $draftfiles);
 
         $draftfile = $fs->get_file($usercontext->id, 'user', 'draft', $draftitemid, $filepath, $filename);
         $source = unserialize($draftfile->get_source());
@@ -794,7 +794,7 @@ class core_filelib_testcase extends advanced_testcase {
         $draftitemid = 0;
         file_prepare_draft_area($draftitemid, $usercontext->id, 'user', 'private', 0);
         $draftfiles = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid);
-        $this->assertCount(2, $draftfiles);
+        $this->assertCount(1, $draftfiles);
         $draftfile = $fs->get_file($usercontext->id, 'user', 'draft', $draftitemid, $userfilerecord->filepath, $userfilerecord->filename);
         $draftfile->delete();
         // Save changed file.
@@ -856,7 +856,7 @@ class core_filelib_testcase extends advanced_testcase {
         );
         // Create a file reference.
         $fileref = $fs->create_file_from_reference($filerecord, $userrepository->id, $userfileref);
-        $this->assertCount(2, $fs->get_area_files($usercontext->id, 'user', 'private'));    // 2 because includes the '.' file.
+        $this->assertCount(1, $fs->get_area_files($usercontext->id, 'user', 'private'));    // 2 because includes the '.' file.
 
         // Save using empty draft item id, all files will be deleted.
         file_save_draft_area_files(0, $usercontext->id, 'user', 'private', 0);
@@ -864,11 +864,11 @@ class core_filelib_testcase extends advanced_testcase {
 
         // Create a file again.
         $userfile = $fs->create_file_from_string($userfilerecord, $filecontent);
-        $this->assertCount(2, $fs->get_area_files($usercontext->id, 'user', 'private'));
+        $this->assertCount(1, $fs->get_area_files($usercontext->id, 'user', 'private'));
 
         // Save without merge.
         file_save_draft_area_files(IGNORE_FILE_MERGE, $usercontext->id, 'user', 'private', 0);
-        $this->assertCount(2, $fs->get_area_files($usercontext->id, 'user', 'private'));
+        $this->assertCount(1, $fs->get_area_files($usercontext->id, 'user', 'private'));
     }
 
     /**
@@ -1267,8 +1267,8 @@ EOF;
         file_merge_files_from_draft_area_into_filearea($draftitemid, $usercontext->id, 'user', 'private', 0, $options);
 
         $files = $fs->get_area_files($usercontext->id, 'user', 'private', 0);
-        // Directory and file.
-        $this->assertCount(2, $files);
+        // Only the file.
+        $this->assertCount(1, $files);
         $found = false;
         foreach ($files as $file) {
             if (!$file->is_directory()) {
@@ -1294,7 +1294,7 @@ EOF;
         file_merge_files_from_draft_area_into_filearea($file->get_itemid(), $usercontext->id, 'user', 'private', 0, $options);
 
         $files = $fs->get_area_files($usercontext->id, 'user', 'private', 0);
-        $this->assertCount(4, $files);
+        $this->assertCount(3, $files);
 
         // Update contents of one file.
         $filerecord = array(
@@ -1305,7 +1305,7 @@ EOF;
         file_merge_files_from_draft_area_into_filearea($file->get_itemid(), $usercontext->id, 'user', 'private', 0, $options);
 
         $files = $fs->get_area_files($usercontext->id, 'user', 'private', 0);
-        $this->assertCount(4, $files);
+        $this->assertCount(3, $files);
         $found = false;
         foreach ($files as $file) {
             if ($file->get_filename() == 'second.txt') {
@@ -1330,7 +1330,7 @@ EOF;
         file_merge_files_from_draft_area_into_filearea($file->get_itemid(), $usercontext->id, 'user', 'private', 0, $options);
 
         $files = $fs->get_area_files($usercontext->id, 'user', 'private', 0);
-        $this->assertCount(4, $files);
+        $this->assertCount(3, $files);
         $found = false;
         foreach ($files as $file) {
             if ($file->get_filename() == 'second.txt') {
@@ -1386,11 +1386,9 @@ EOF;
         // Add new file.
         file_merge_files_from_draft_area_into_filearea($file->get_itemid(), $file->get_contextid(), 'user', 'private', 0, $options);
         $usercontext = context_user::instance($USER->id);
-        // Check we only get the base directory, not a new file.
+        // Check we do not get a new file.
         $files = $fs->get_area_files($usercontext->id, 'user', 'private', 0);
-        $this->assertCount(1, $files);
-        $file = array_shift($files);
-        $this->assertTrue($file->is_directory());
+        $this->assertCount(0, $files);
     }
 
     /**
@@ -1412,11 +1410,9 @@ EOF;
         // Add new file.
         file_merge_files_from_draft_area_into_filearea($file->get_itemid(), $file->get_contextid(), 'user', 'private', 0, $options);
         $usercontext = context_user::instance($USER->id);
-        // Check we only get the base directory, not a new file.
+        // Check we do not get a new file.
         $files = $fs->get_area_files($usercontext->id, 'user', 'private', 0);
-        $this->assertCount(1, $files);
-        $file = array_shift($files);
-        $this->assertTrue($file->is_directory());
+        $this->assertCount(0, $files);
     }
 
     /**

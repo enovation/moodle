@@ -221,7 +221,7 @@ class assignsubmission_file_privacy_testcase extends \mod_assign\tests\mod_assig
         ];
 
         $data = $DB->get_records('files', ['contextid' => $context1->id, 'component' => 'assignsubmission_file']);
-        $this->assertCount(6, $data);
+        $this->assertCount(3, $data);
 
         $data = $DB->get_records('assignsubmission_file', ['assignment' => $assign1->get_instance()->id]);
         $this->assertCount(3, $data);
@@ -235,7 +235,7 @@ class assignsubmission_file_privacy_testcase extends \mod_assign\tests\mod_assig
         $deletedata->populate_submissions_and_grades();
         \assignsubmission_file\privacy\provider::delete_submissions($deletedata);
         $data = $DB->get_records('files', ['contextid' => $context1->id, 'component' => 'assignsubmission_file']);
-        $this->assertCount(2, $data);
+        $this->assertCount(1, $data);
 
         // Submission 1 and 3 have been removed. We should be left with submission2.
         $data = $DB->get_records('assignsubmission_file', ['assignment' => $assign1->get_instance()->id]);

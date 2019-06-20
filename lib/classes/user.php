@@ -605,7 +605,7 @@ class core_user {
         } else {
             // Save newly uploaded file, this will avoid context mismatch for newly created users.
             file_save_draft_area_files($usernew->imagefile, $context->id, 'user', 'newicon', 0, $filemanageroptions);
-            if (($iconfiles = $fs->get_area_files($context->id, 'user', 'newicon')) && count($iconfiles) == 2) {
+            if (($iconfiles = $fs->get_area_files($context->id, 'user', 'newicon'))) {
                 // Get file which was uploaded in draft area.
                 foreach ($iconfiles as $file) {
                     if (!$file->is_directory()) {

@@ -1083,10 +1083,18 @@ function file_save_draft_area_files($draftitemid, $contextid, $component, $filea
     }
 
     $draftfiles = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid, 'id');
+    // From the $draftfiles remove /. directory entry.
+    // This code should not be needed, if all root level directory entries are removed.
+    foreach ($draftfiles as $k => $file) {
+        if ($file->get_filename() === '.' && $file->get_filepath() === '/') {
+            unset($draftfiles[$k]);
+            break;
+        }
+    }
     $oldfiles   = $fs->get_area_files($contextid, $component, $filearea, $itemid, 'id');
 
     // One file in filearea means it is empty (it has only top-level directory '.').
-    if (count($draftfiles) > 1 || count($oldfiles) > 1) {
+    if (count($draftfiles) > 0 || count($oldfiles) > 0) {
         // we have to merge old and new files - we want to keep file ids for files that were not changed
         // we change time modified for all new and changed files, we keep time created as is
 

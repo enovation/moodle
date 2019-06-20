@@ -503,13 +503,13 @@ class core_grades_privacy_testcase extends provider_testcase {
 
         // Feedback file area.
         $files = $fs->get_area_files($a1context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
-        $this->assertEquals(4, count($files));
-
-        $files = $fs->get_area_files($a2context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
         $this->assertEquals(2, count($files));
 
+        $files = $fs->get_area_files($a2context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
+        $this->assertEquals(1, count($files));
+
         $files = $fs->get_area_files($a3context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
-        $this->assertEquals(4, count($files));
+        $this->assertEquals(2, count($files));
 
         // Grade item 2 was deleted, so the associated files were as well.
         $files = $fs->get_area_files($a4context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
@@ -517,13 +517,13 @@ class core_grades_privacy_testcase extends provider_testcase {
 
         // History file area.
         $files = $fs->get_area_files($a1context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
-        $this->assertEquals(4, count($files));
-
-        $files = $fs->get_area_files($a2context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
         $this->assertEquals(2, count($files));
 
+        $files = $fs->get_area_files($a2context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
+        $this->assertEquals(1, count($files));
+
         $files = $fs->get_area_files($a3context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
-        $this->assertEquals(4, count($files));
+        $this->assertEquals(2, count($files));
 
         // Grade item 2 was deleted, so the associated files were as well.
         $files = $fs->get_area_files($a4context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
@@ -554,7 +554,7 @@ class core_grades_privacy_testcase extends provider_testcase {
         $this->assertEquals(0, count($files));
 
         $files = $fs->get_area_files($a3context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
-        $this->assertEquals(4, count($files));
+        $this->assertEquals(2, count($files));
 
         // Grade item 2 was deleted, so the associated files were as well.
         $files = $fs->get_area_files($a4context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
@@ -568,7 +568,7 @@ class core_grades_privacy_testcase extends provider_testcase {
         $this->assertEquals(0, count($files));
 
         $files = $fs->get_area_files($a3context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
-        $this->assertEquals(4, count($files));
+        $this->assertEquals(2, count($files));
 
         // Grade item 2 was deleted, so the associated files were as well.
         $files = $fs->get_area_files($a4context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
@@ -589,7 +589,7 @@ class core_grades_privacy_testcase extends provider_testcase {
 
         // The user context is only reported when there are orphan historical grades, so we only delete those files.
         $files = $fs->get_area_files($a3context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
-        $this->assertEquals(4, count($files));
+        $this->assertEquals(2, count($files));
 
         // Grade item 2 was deleted, so the associated files were as well.
         $files = $fs->get_area_files($a4context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
@@ -604,7 +604,7 @@ class core_grades_privacy_testcase extends provider_testcase {
 
         // User 2 still has historical files.
         $files = $fs->get_area_files($a3context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
-        $this->assertEquals(2, count($files));
+        $this->assertEquals(1, count($files));
 
         // Grade item 2 was deleted, so the associated files were as well.
         $files = $fs->get_area_files($a4context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
@@ -752,13 +752,13 @@ class core_grades_privacy_testcase extends provider_testcase {
 
         // Feedback file area.
         $files = $fs->get_area_files($a1context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
-        $this->assertEquals(4, count($files));
-
-        $files = $fs->get_area_files($a2context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
         $this->assertEquals(2, count($files));
 
+        $files = $fs->get_area_files($a2context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
+        $this->assertEquals(1, count($files));
+
         $files = $fs->get_area_files($a3context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
-        $this->assertEquals(4, count($files));
+        $this->assertEquals(2, count($files));
 
         // Grade item 2 was deleted, so the associated files were as well.
         $files = $fs->get_area_files($a4context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
@@ -766,13 +766,13 @@ class core_grades_privacy_testcase extends provider_testcase {
 
         // History file area.
         $files = $fs->get_area_files($a1context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
-        $this->assertEquals(4, count($files));
-
-        $files = $fs->get_area_files($a2context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
         $this->assertEquals(2, count($files));
 
+        $files = $fs->get_area_files($a2context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
+        $this->assertEquals(1, count($files));
+
         $files = $fs->get_area_files($a3context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
-        $this->assertEquals(4, count($files));
+        $this->assertEquals(2, count($files));
 
         // Grade item 2 was deleted, so the associated files were as well.
         $files = $fs->get_area_files($a4context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
@@ -789,13 +789,13 @@ class core_grades_privacy_testcase extends provider_testcase {
 
         // Feedback file area.
         $files = $fs->get_area_files($a1context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
-        $this->assertEquals(2, count($files));
+        $this->assertEquals(1, count($files));
 
         $files = $fs->get_area_files($a2context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
         $this->assertEquals(0, count($files));
 
         $files = $fs->get_area_files($a3context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
-        $this->assertEquals(4, count($files));
+        $this->assertEquals(2, count($files));
 
         // Grade item 2 was deleted, so the associated files were as well.
         $files = $fs->get_area_files($a4context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
@@ -803,13 +803,13 @@ class core_grades_privacy_testcase extends provider_testcase {
 
         // History file area.
         $files = $fs->get_area_files($a1context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
-        $this->assertEquals(2, count($files));
+        $this->assertEquals(1, count($files));
 
         $files = $fs->get_area_files($a2context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
         $this->assertEquals(0, count($files));
 
         $files = $fs->get_area_files($a3context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
-        $this->assertEquals(4, count($files));
+        $this->assertEquals(2, count($files));
 
         // Grade item 2 was deleted, so the associated files were as well.
         $files = $fs->get_area_files($a4context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
@@ -826,13 +826,13 @@ class core_grades_privacy_testcase extends provider_testcase {
 
         // Feedback file area.
         $files = $fs->get_area_files($a1context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
-        $this->assertEquals(2, count($files));
+        $this->assertEquals(1, count($files));
 
         $files = $fs->get_area_files($a2context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
         $this->assertEquals(0, count($files));
 
         $files = $fs->get_area_files($a3context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
-        $this->assertEquals(4, count($files));
+        $this->assertEquals(2, count($files));
 
         // Grade item 2 was deleted, so the associated files were as well.
         $files = $fs->get_area_files($a4context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
@@ -840,13 +840,13 @@ class core_grades_privacy_testcase extends provider_testcase {
 
         // History file area.
         $files = $fs->get_area_files($a1context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
-        $this->assertEquals(2, count($files));
+        $this->assertEquals(1, count($files));
 
         $files = $fs->get_area_files($a2context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
         $this->assertEquals(0, count($files));
 
         $files = $fs->get_area_files($a3context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
-        $this->assertEquals(2, count($files));
+        $this->assertEquals(1, count($files));
 
         // Grade item 2 was deleted, so the associated files were as well.
         $files = $fs->get_area_files($a4context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
@@ -863,13 +863,13 @@ class core_grades_privacy_testcase extends provider_testcase {
 
         // Feedback file area.
         $files = $fs->get_area_files($a1context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
-        $this->assertEquals(2, count($files));
+        $this->assertEquals(1, count($files));
 
         $files = $fs->get_area_files($a2context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
         $this->assertEquals(0, count($files));
 
         $files = $fs->get_area_files($a3context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
-        $this->assertEquals(2, count($files));
+        $this->assertEquals(1, count($files));
 
         // Grade item 2 was deleted, so the associated files were as well.
         $files = $fs->get_area_files($a4context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
@@ -877,13 +877,13 @@ class core_grades_privacy_testcase extends provider_testcase {
 
         // History file area.
         $files = $fs->get_area_files($a1context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
-        $this->assertEquals(2, count($files));
+        $this->assertEquals(1, count($files));
 
         $files = $fs->get_area_files($a2context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
         $this->assertEquals(0, count($files));
 
         $files = $fs->get_area_files($a3context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
-        $this->assertEquals(2, count($files));
+        $this->assertEquals(1, count($files));
 
         // Grade item 2 was deleted, so the associated files were as well.
         $files = $fs->get_area_files($a4context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);

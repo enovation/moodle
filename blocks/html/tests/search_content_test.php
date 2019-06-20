@@ -137,7 +137,7 @@ class search_content_testcase extends \advanced_testcase {
             $this->assertCount(0, $doc->get_files());
             $area->attach_files($doc);
             $files = $doc->get_files();
-            $this->assertCount(2, $files);
+            $this->assertCount(1, $files);
             foreach ($files as $file) {
                 if ($file->is_directory()) {
                     continue;

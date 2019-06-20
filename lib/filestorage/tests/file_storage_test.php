@@ -82,8 +82,11 @@ class core_files_file_storage_testcase extends advanced_testcase {
         $this->assertFileExists($location);
 
         // Verify the dir placeholder files are created.
-        $this->assertEquals($installedfiles + 3, $DB->count_records('files', array()));
-        $this->assertTrue($DB->record_exists('files', array('pathnamehash'=>sha1('/'.$filerecord['contextid'].'/'.$filerecord['component'].'/'.$filerecord['filearea'].'/'.$filerecord['itemid'].'/.'))));
+        $this->assertEquals($installedfiles + 2, $DB->count_records('files', array()));
+        $pathname = '/'.$filerecord['contextid'].'/'.$filerecord['component'].
+                    '/'.$filerecord['filearea'].'/'.$filerecord['itemid'].'/.';
+        $this->assertFalse($DB->record_exists('files',
+                array('pathnamehash' => sha1($pathname))));
         $this->assertTrue($DB->record_exists('files', array('pathnamehash'=>sha1('/'.$filerecord['contextid'].'/'.$filerecord['component'].'/'.$filerecord['filearea'].'/'.$filerecord['itemid'].$filerecord['filepath'].'.'))));
 
         // Tests that missing content file is recreated.
@@ -97,7 +100,7 @@ class core_files_file_storage_testcase extends advanced_testcase {
         $this->assertSame($file->get_contenthash(), $file2->get_contenthash());
         $this->assertFileExists($location);
 
-        $this->assertEquals($installedfiles + 4, $DB->count_records('files', array()));
+        $this->assertEquals($installedfiles + 3, $DB->count_records('files', array()));
 
         // Test that borked content file is recreated.
 
@@ -112,7 +115,7 @@ class core_files_file_storage_testcase extends advanced_testcase {
         $this->assertSame($content, file_get_contents($location));
         $this->assertDebuggingCalled();
 
-        $this->assertEquals($installedfiles + 5, $DB->count_records('files', array()));
+        $this->assertEquals($installedfiles + 4, $DB->count_records('files', array()));
     }
 
     /**
@@ -157,8 +160,11 @@ class core_files_file_storage_testcase extends advanced_testcase {
         $this->assertFileExists($location);
 
         // Verify the dir placeholder files are created.
-        $this->assertEquals($installedfiles + 3, $DB->count_records('files', array()));
-        $this->assertTrue($DB->record_exists('files', array('pathnamehash'=>sha1('/'.$filerecord['contextid'].'/'.$filerecord['component'].'/'.$filerecord['filearea'].'/'.$filerecord['itemid'].'/.'))));
+        $this->assertEquals($installedfiles + 2, $DB->count_records('files', array()));
+        $pathname = '/'.$filerecord['contextid'].'/'.$filerecord['component'].
+                    '/'.$filerecord['filearea'].'/'.$filerecord['itemid'].'/.';
+        $this->assertFalse($DB->record_exists('files',
+                array('pathnamehash' => sha1($pathname))));
         $this->assertTrue($DB->record_exists('files', array('pathnamehash'=>sha1('/'.$filerecord['contextid'].'/'.$filerecord['component'].'/'.$filerecord['filearea'].'/'.$filerecord['itemid'].$filerecord['filepath'].'.'))));
 
         // Tests that missing content file is recreated.
@@ -172,7 +178,7 @@ class core_files_file_storage_testcase extends advanced_testcase {
         $this->assertSame($file->get_contenthash(), $file2->get_contenthash());
         $this->assertFileExists($location);
 
-        $this->assertEquals($installedfiles + 4, $DB->count_records('files', array()));
+        $this->assertEquals($installedfiles + 3, $DB->count_records('files', array()));
 
         // Test that borked content file is recreated.
 
@@ -187,7 +193,7 @@ class core_files_file_storage_testcase extends advanced_testcase {
         $this->assertSame(file_get_contents($filepath), file_get_contents($location));
         $this->assertDebuggingCalled();
 
-        $this->assertEquals($installedfiles + 5, $DB->count_records('files', array()));
+        $this->assertEquals($installedfiles + 4, $DB->count_records('files', array()));
 
         // Test invalid file creation.
 
@@ -551,7 +557,7 @@ class core_files_file_storage_testcase extends advanced_testcase {
         $areafiles = $fs->get_area_files($user->ctxid, 'user', 'private');
 
         // Should be the two files we added plus the folder.
-        $this->assertEquals(4, count($areafiles));
+        $this->assertEquals(3, count($areafiles));
 
         // Verify structure.
         foreach ($areafiles as $key => $file) {
@@ -1018,7 +1024,7 @@ class core_files_file_storage_testcase extends advanced_testcase {
         // Get area files with default options.
         $areafiles = $fs->get_area_files($user->ctxid, 'user', 'private');
         // Should be the two files we added plus the folder.
-        $this->assertEquals(4, count($areafiles));
+        $this->assertEquals(3, count($areafiles));
         $fs->delete_area_files($user->ctxid, 'user', 'private');
 
         $areafiles = $fs->get_area_files($user->ctxid, 'user', 'private');
@@ -1039,11 +1045,11 @@ class core_files_file_storage_testcase extends advanced_testcase {
         // Get area files with default options.
         $areafiles = $fs->get_area_files($user->ctxid, 'user', 'private');
         // Should be the two files we added plus the folder.
-        $this->assertEquals(4, count($areafiles));
+        $this->assertEquals(3, count($areafiles));
         $fs->delete_area_files($user->ctxid, 'user', 'private', 9999);
 
         $areafiles = $fs->get_area_files($user->ctxid, 'user', 'private');
-        $this->assertEquals(4, count($areafiles));
+        $this->assertEquals(3, count($areafiles));
     }
 
     /**
@@ -1059,7 +1065,7 @@ class core_files_file_storage_testcase extends advanced_testcase {
         // Get area files with default options.
         $areafiles = $fs->get_area_files($user->ctxid, 'user', 'private');
         // Should be the two files we added plus the folder.
-        $this->assertEquals(4, count($areafiles));
+        $this->assertEquals(3, count($areafiles));
         $fs->delete_area_files_select($user->ctxid, 'user', 'private', '!= :notitemid', array('notitemid'=>9999));
 
         $areafiles = $fs->get_area_files($user->ctxid, 'user', 'private');
@@ -1078,7 +1084,7 @@ class core_files_file_storage_testcase extends advanced_testcase {
         $fs = get_file_storage();
 
         $areafiles = $fs->get_area_files($user->ctxid, 'user', 'private');
-        $this->assertEquals(4, count($areafiles));
+        $this->assertEquals(3, count($areafiles));
         $fs->delete_component_files('user');
         $areafiles = $fs->get_area_files($user->ctxid, 'user', 'private');
         $this->assertEquals(0, count($areafiles));

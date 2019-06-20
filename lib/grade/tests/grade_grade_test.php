@@ -471,11 +471,11 @@ class core_grade_grade_testcase extends grade_base_testcase {
 
         // Feedback file area.
         $files = $fs->get_area_files($a1context->id, GRADE_FILE_COMPONENT, GRADE_FEEDBACK_FILEAREA);
-        $this->assertEquals(2, count($files));
+        $this->assertEquals(1, count($files));
 
         // History file area.
         $files = $fs->get_area_files($a1context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
-        $this->assertEquals(2, count($files));
+        $this->assertEquals(1, count($files));
 
         $gg = grade_grade::fetch(array('userid' => $u1->id, 'itemid' => $gi->id));
 
@@ -487,7 +487,7 @@ class core_grade_grade_testcase extends grade_base_testcase {
 
         // History file area.
         $files = $fs->get_area_files($a1context->id, GRADE_FILE_COMPONENT, GRADE_HISTORY_FEEDBACK_FILEAREA);
-        $this->assertEquals(2, count($files));
+        $this->assertEquals(1, count($files));
     }
 
     /**

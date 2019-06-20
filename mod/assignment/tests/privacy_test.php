@@ -481,7 +481,7 @@ class mod_assignment_privacy_testcase extends advanced_testcase {
             'filearea' => 'submission',
             'contextid' => $context->id
         ]);
-        $this->assertCount(6, $files);
+        $this->assertCount(3, $files);
 
         $submissions = $this->get_assignment_submissions($context->id);
         $this->assertCount(3, $submissions);
@@ -494,7 +494,7 @@ class mod_assignment_privacy_testcase extends advanced_testcase {
             'filearea' => 'submission',
             'contextid' => $context->id
         ]);
-        $this->assertCount(2, $files);
+        $this->assertCount(1, $files);
 
         $submissions = $this->get_assignment_submissions($context->id);
         $this->assertCount(1, $submissions);
