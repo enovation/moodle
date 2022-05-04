@@ -87,6 +87,7 @@ $string['errorminpassworddigits'] = 'Passwords must have at least {$a} digit(s).
 $string['errorminpasswordlength'] = 'Passwords must be at least {$a} characters long.';
 $string['errorminpasswordlower'] = 'Passwords must have at least {$a} lower case letter(s).';
 $string['errorminpasswordnonalphanum'] = 'The password must have at least {$a} special character(s) such as as *, -, or #.';
+$string['errorpasswordknown'] = 'This password is well known.';
 $string['errorpasswordreused'] = 'This password has been used before, and is not permitted to be reused';
 $string['errorminpasswordupper'] = 'Passwords must have at least {$a} upper case letter(s).';
 $string['errorpasswordupdate'] = 'Error updating password, password not changed';

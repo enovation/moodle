@@ -92,7 +92,6 @@ if ($hassiteconfig) { // speedup for non-admins, add all caps used on this page
     $temp->add(new admin_setting_configselect('lockoutthreshold', new lang_string('lockoutthreshold', 'admin'), new lang_string('lockoutthreshold_desc', 'admin'), 0, $options));
     $temp->add(new admin_setting_configduration('lockoutwindow', new lang_string('lockoutwindow', 'admin'), new lang_string('lockoutwindow_desc', 'admin'), 60*30));
     $temp->add(new admin_setting_configduration('lockoutduration', new lang_string('lockoutduration', 'admin'), new lang_string('lockoutduration_desc', 'admin'), 60*30));
-
     $temp->add(new admin_setting_configcheckbox('passwordpolicy', new lang_string('passwordpolicy', 'admin'), new lang_string('configpasswordpolicy', 'admin'), 1));
     $temp->add(new admin_setting_configtext('minpasswordlength', new lang_string('minpasswordlength', 'admin'), new lang_string('configminpasswordlength', 'admin'), 8, PARAM_INT));
     $temp->add(new admin_setting_configtext('minpassworddigits', new lang_string('minpassworddigits', 'admin'), new lang_string('configminpassworddigits', 'admin'), 1, PARAM_INT));
@@ -100,6 +99,8 @@ if ($hassiteconfig) { // speedup for non-admins, add all caps used on this page
     $temp->add(new admin_setting_configtext('minpasswordupper', new lang_string('minpasswordupper', 'admin'), new lang_string('configminpasswordupper', 'admin'), 1, PARAM_INT));
     $temp->add(new admin_setting_configtext('minpasswordnonalphanum', new lang_string('minpasswordnonalphanum', 'admin'), new lang_string('configminpasswordnonalphanum', 'admin'), 1, PARAM_INT));
     $temp->add(new admin_setting_configtext('maxconsecutiveidentchars', new lang_string('maxconsecutiveidentchars', 'admin'), new lang_string('configmaxconsecutiveidentchars', 'admin'), 0, PARAM_INT));
+    $temp->add(new admin_setting_configcheckbox('knownpasswordscheck', new lang_string('knownpasswordscheck', 'admin'), new lang_string('configknownpasswordscheck', 'admin'), 1));
+    $temp->add(new admin_setting_configtext('knownpasswordsdb', new lang_string('knownpasswordsdb', 'admin'), new lang_string('configknownpasswordsdb', 'admin'), '', PARAM_TEXT));
     $temp->add(new admin_setting_configcheckbox('passwordpolicycheckonlogin',
         new lang_string('passwordpolicycheckonlogin', 'admin'),
         new lang_string('configpasswordpolicycheckonlogin', 'admin'), 0));

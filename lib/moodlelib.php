@@ -4960,6 +4960,10 @@ function check_password_policy($password, &$errmsg, $user = null) {
         if (!check_consecutive_identical_characters($password, $CFG->maxconsecutiveidentchars)) {
             $errmsg .= '<div>'. get_string('errormaxconsecutiveidentchars', 'auth', $CFG->maxconsecutiveidentchars) .'</div>';
         }
+        if (!check_password_exists($password, $CFG->knownpasswordsdatabase)) {
+            $errmsg .= '<div>'. get_string('errorpasswordknown', 'auth') .'</div>';
+        }
+
 
         // Fire any additional password policy functions from plugins.
         // Plugin functions should output an error message string or empty string for success.
@@ -10193,6 +10197,27 @@ function get_site_identifier() {
     }
     // Return it.
     return $CFG->siteidentifier;
+}
+
+/**
+ * Check whether the given password exists in a database
+ * of SHA-1 hashes.
+ *
+ * @param string $password   password to be checked against the password policy
+ * @param string $databasefile  path to the file containing SHA-1 hashes
+ * @return bool
+ */
+function check_password_exists($password, $databasefile) {
+    // Check if the file exists and it's a valid file.
+
+    // Open in a binary, read mode.
+
+    // Calculate SHA-1 hash of the $password.
+
+    // Perform binary search.
+
+    // @TODO implement
+    return (bool) rand(0,1);
 }
 
 /**
