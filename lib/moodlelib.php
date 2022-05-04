@@ -10208,16 +10208,50 @@ function get_site_identifier() {
  * @return bool
  */
 function check_password_exists($password, $databasefile) {
+    global $CFG;
+
     // Check if the file exists and it's a valid file.
+    if (!$databasefile) {
+        $databasefile = $CFG->libdir.'/knownpasswords.bin';
+    }
+
+    $filesize = filesize($databasefile);
+    if ($filesize < 20 || $filesize % 20 != 0) {
+        // Invalid database, implement fail-secure.
+        return false;
+    }
+
+    $total = (int) ($filesize / 20);
 
     // Open in a binary, read mode.
+    $handle = fopen($databasefile, "r");
+    if (!$handle) {
+        return false;
+    }
 
     // Calculate SHA-1 hash of the $password.
+    $search = sha1($password, true);
 
     // Perform binary search.
+    $left = 0;
+    $right = $total - 1;
 
-    // @TODO implement
-    return (bool) rand(0,1);
+    while ($left <= $right) {
+        $middle = (int) floor(($left + $right) / 2);
+        fseek($handle, $middle * 20);
+        $value = fread($handle, 20);
+        if ($value < $search) {
+            $left = $middle + 1;
+        } else if ($value > $search) {
+            $right = $middle - 1;
+        } else {
+            fclose($handle);
+            return false;
+        }
+    }
+
+    fclose($handle);
+    return true;
 }
 
 /**
