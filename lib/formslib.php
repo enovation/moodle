@@ -2026,7 +2026,7 @@ class MoodleQuickForm extends HTML_QuickForm_DHTMLRulesTableless {
      * clean their own data.
      *
      * @param string $elementname
-     * @param int $paramtype defines type of data contained in element. Use the constants PARAM_*.
+     * @param string $paramtype defines type of data contained in element. Use the constants PARAM_*.
      *        {@link lib/moodlelib.php} for defined parameter types
      */
     function setType($elementname, $paramtype) {
@@ -2080,7 +2080,7 @@ class MoodleQuickForm extends HTML_QuickForm_DHTMLRulesTableless {
      *
      * @param string $elementname name of the element.
      * @param mixed $value value that should be cleaned.
-     * @param int $default default constant value to be returned (PARAM_...)
+     * @param string $default default constant value to be returned (PARAM_...)
      * @return string|array constant value or array of constant values (PARAM_...)
      */
     public function getCleanType($elementname, $value, $default = PARAM_RAW) {
@@ -2112,7 +2112,7 @@ class MoodleQuickForm extends HTML_QuickForm_DHTMLRulesTableless {
      * Return the cleaned value using the passed type(s).
      *
      * @param mixed $value value that has to be cleaned.
-     * @param int|array $type constant value to use to clean (PARAM_...), typically returned by {@link self::getCleanType()}.
+     * @param string|array $type constant value to use to clean (PARAM_...), typically returned by {@link self::getCleanType()}.
      * @return mixed cleaned up value.
      */
     public function getCleanedValue($value, $type) {
