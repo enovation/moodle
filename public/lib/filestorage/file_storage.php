@@ -2268,6 +2268,17 @@ class file_storage {
         $rs->close();
         mtrace('done.');
 
+        // Remove rows from {files_reference} without any link/usage in {files} and not synced in the last 7 days.
+        mtrace('Cleaning deleted referenced files... ', '');
+        \core\cron::trace_time_and_memory();
+        $sql = "SELECT r.id
+                  FROM {files_reference} r
+             LEFT JOIN {files} f ON f.referencefileid = r.id
+                 WHERE f.id IS NULL
+                       AND (r.lastsync IS NULL OR r.lastsync < :old)";
+        $DB->delete_records_subquery('files_reference', 'id', 'id', $sql, ['old' => time() - 7 * DAYSECS]);
+        mtrace('done.');
+
         // Remove orphaned files:
         // * preview files in the core preview filearea without the existing original file.
         // * document converted files in core documentconversion filearea without the existing original file.

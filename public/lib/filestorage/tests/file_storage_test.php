@@ -1070,6 +1070,75 @@ final class file_storage_test extends \advanced_testcase {
     }
 
     /**
+     * Tests that cron removes orphaned file references without removing active ones.
+     *
+     * @covers ::cron
+     */
+    public function test_cron_removes_orphaned_file_references(): void {
+        global $DB;
+
+        $this->resetAfterTest(true);
+
+        $fs = get_file_storage();
+        $context = \context_system::instance();
+        $repositoryid = $DB->get_field('repository_instances', 'id', ['typeid' => FILE_INTERNAL], MUST_EXIST);
+
+        $createsourcefile = function (string $filename, int $itemid) use ($fs, $context): array {
+            $filerecord = [
+                'contextid' => $context->id,
+                'component' => 'core',
+                'filearea' => 'phpunit',
+                'itemid' => $itemid,
+                'filepath' => '/',
+                'filename' => $filename,
+            ];
+            $fs->create_file_from_string($filerecord, 'Test content');
+            return $filerecord;
+        };
+
+        $createalias = function (array $source, string $filename, int $itemid) use ($fs, $context, $repositoryid): \stored_file {
+            $filerecord = [
+                'contextid' => $context->id,
+                'component' => 'core',
+                'filearea' => 'phpunit',
+                'itemid' => $itemid,
+                'filepath' => '/',
+                'filename' => $filename,
+            ];
+            return $fs->create_file_from_reference($filerecord, $repositoryid, file_storage::pack_reference($source));
+        };
+
+        $activesource = $createsourcefile('active-source.txt', 1);
+        $activealias = $createalias($activesource, 'active-alias.txt', 2);
+        $activeid = $activealias->get_referencefileid();
+
+        $orphansource = $createsourcefile('orphan-source.txt', 3);
+        $orphanalias = $createalias($orphansource, 'orphan-alias.txt', 4);
+        $orphanid = $orphanalias->get_referencefileid();
+
+        $recentsource = $createsourcefile('recent-source.txt', 5);
+        $recentalias = $createalias($recentsource, 'recent-alias.txt', 6);
+        $recentid = $recentalias->get_referencefileid();
+        $DB->set_field('files_reference', 'lastsync', time(), ['id' => $recentid]);
+
+        // Simulate an area cleanup that deletes the last file using these references.
+        $DB->delete_records('files', ['id' => $orphanalias->get_id()]);
+        $DB->delete_records('files', ['id' => $recentalias->get_id()]);
+
+        $this->assertTrue($DB->record_exists('files_reference', ['id' => $activeid]));
+        $this->assertTrue($DB->record_exists('files_reference', ['id' => $orphanid]));
+        $this->assertTrue($DB->record_exists('files_reference', ['id' => $recentid]));
+
+        $this->expectOutputRegex('/Cleaning deleted referenced files/');
+        $fs->cron();
+
+        $this->assertTrue($DB->record_exists('files_reference', ['id' => $activeid]));
+        $this->assertFalse($DB->record_exists('files_reference', ['id' => $orphanid]));
+        // Orphaned references synced recently are kept.
+        $this->assertTrue($DB->record_exists('files_reference', ['id' => $recentid]));
+    }
+
+    /**
      * Tests for is_area_empty.
      */
     public function test_is_area_empty(): void {
